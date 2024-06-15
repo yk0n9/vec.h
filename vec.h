@@ -11,84 +11,105 @@
         unsigned int len; \
     }
 
+#define Vec_as_ptr(self) \
+    (self)->data
+
+#define Vec_len(self) \
+    (self)->len
+
+#define __capacity(self) \
+    (self)->cap
+
 #define Vec_new() \
     {NULL, 0, 0}
 
-#define Vec_grow(self)                                                               \
-    do                                                                               \
-    {                                                                                \
-        (self)->cap <<= 1;                                                           \
-        if ((self)->cap < 8)                                                         \
-        {                                                                            \
-            (self)->cap = 8;                                                         \
-        }                                                                            \
-        (self)->data = realloc((self)->data, sizeof(*((self)->data)) * (self)->cap); \
+#define Vec_with_capacity(num) \
+    {malloc(sizeof(*(Vec_as_ptr(self))) * num), num, 0}
+
+#define Vec_is_empty(self) \
+    Vec_len(self) == 0
+
+#define __grow(self)                                                                                \
+    do                                                                                              \
+    {                                                                                               \
+        __capacity(self) <<= 1;                                                                     \
+        if (__capacity(self) < 8)                                                                   \
+        {                                                                                           \
+            __capacity(self) = 8;                                                                   \
+        }                                                                                           \
+        Vec_as_ptr(self) = realloc(Vec_as_ptr(self), sizeof(*Vec_as_ptr(self)) * __capacity(self)); \
     } while (0)
 
-#define Vec_push(self, item)                \
-    do                                      \
-    {                                       \
-        if ((self)->len == (self)->cap)     \
-        {                                   \
-            Vec_grow(self);                 \
-        }                                   \
-        (self)->data[(self)->len++] = item; \
+#define Vec_push(self, item)                      \
+    do                                            \
+    {                                             \
+        if (Vec_len(self) == __capacity(self))    \
+        {                                         \
+            __grow(self);                         \
+        }                                         \
+        Vec_as_ptr(self)[Vec_len(self)++] = item; \
     } while (0)
 
-#define Vec_insert(self, index, item)                      \
-    do                                                     \
-    {                                                      \
-        if (index < (self)->len || index >= 0)             \
-        {                                                  \
-            if ((self)->len == (self)->cap)                \
-            {                                              \
-                Vec_grow(self);                            \
-            }                                              \
-            for (int i = (self)->len - 1; i >= index; i--) \
-            {                                              \
-                (self)->data[i + 1] = (self)->data[i];     \
-            }                                              \
-            (self)->data[index] = item;                    \
-            (self)->len++;                                 \
-        }                                                  \
+#define Vec_insert(self, index, item)                          \
+    do                                                         \
+    {                                                          \
+        if (index < Vec_len(self) || index >= 0)               \
+        {                                                      \
+            if (Vec_len(self) == __capacity(self))             \
+            {                                                  \
+                __grow(self);                                  \
+            }                                                  \
+            for (int i = Vec_len(self) - 1; i >= index; i--)   \
+            {                                                  \
+                Vec_as_ptr(self)[i + 1] = Vec_as_ptr(self)[i]; \
+            }                                                  \
+            Vec_as_ptr(self)[index] = item;                    \
+            Vec_len(self)++;                                   \
+        }                                                      \
     } while (0)
 
-#define Vec_remove(self, index)                           \
-    do                                                    \
-    {                                                     \
-        if (index < (self)->len || index >= 0)            \
-        {                                                 \
-            for (int i = index; i < (self)->len - 1; i++) \
-            {                                             \
-                (self)->data[i] = (self)->data[i + 1];    \
-            }                                             \
-            (self)->len--;                                \
-        }                                                 \
+#define Vec_remove(self, index)                                \
+    do                                                         \
+    {                                                          \
+        if (index < Vec_len(self) || index >= 0)               \
+        {                                                      \
+            for (int i = index; i < Vec_len(self) - 1; i++)    \
+            {                                                  \
+                Vec_as_ptr(self)[i] = Vec_as_ptr(self)[i + 1]; \
+            }                                                  \
+            Vec_len(self)--;                                   \
+        }                                                      \
     } while (0)
 
-#define Vec_sort(self, comp)                                             \
-    do                                                                   \
-    {                                                                    \
-        qsort((self)->data, (self)->len, sizeof(*((self)->data)), comp); \
+#define Vec_sort(self, comp)                                                       \
+    do                                                                             \
+    {                                                                              \
+        qsort(Vec_as_ptr(self), Vec_len(self), sizeof(*(Vec_as_ptr(self))), comp); \
     } while (0);
 
 #define Vec_get(self, index, or) \
-    index >= 0 && index < (self)->len ? (self)->data[index] : (or)
+    index >= 0 && index < Vec_len(self) ? Vec_as_ptr(self)[index] : (or)
 
-#define Vec_foreach(self, func)               \
-    do                                        \
-    {                                         \
-        for (int i = 0; i < (self)->len; i++) \
-        {                                     \
-            func(&(self)->data[i]);           \
-        }                                     \
+#define Vec_foreach(self, func)                 \
+    do                                          \
+    {                                           \
+        for (int i = 0; i < Vec_len(self); i++) \
+        {                                       \
+            func(&Vec_as_ptr(self)[i]);         \
+        }                                       \
     } while (0)
 
-#define Vec_drop(self)       \
-    do                       \
-    {                        \
-        free((self)->data);  \
-        (self)->data = NULL; \
-        (self)->len = 0;     \
-        (self)->cap = 0;     \
+#define Vec_clear(self)          \
+    do                           \
+    {                            \
+        free(Vec_as_ptr(self));  \
+        Vec_as_ptr(self) = NULL; \
+        Vec_len(self) = 0;       \
+        __capacity(self) = 0;    \
     } while (0)
+
+#define Vec_first(self) \
+    &Vec_as_ptr(self)[0]
+
+#define Vec_last(self) \
+    &Vec_as_ptr(self)[Vec_len(self) - 1]

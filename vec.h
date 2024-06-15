@@ -12,13 +12,13 @@
     }
 
 #define Vec_as_ptr(self) \
-    (self)->data
+    ((self)->data)
 
 #define Vec_len(self) \
-    (self)->len
+    ((self)->len)
 
 #define __capacity(self) \
-    (self)->cap
+    ((self)->cap)
 
 #define Vec_new() \
     {NULL, 0, 0}
@@ -27,7 +27,7 @@
     {malloc(sizeof(*(Vec_as_ptr(self))) * num), num, 0}
 
 #define Vec_is_empty(self) \
-    Vec_len(self) == 0
+    (Vec_len(self) == 0)
 
 #define __grow(self)                                                                                \
     do                                                                                              \
@@ -88,7 +88,7 @@
     } while (0);
 
 #define Vec_get(self, index, or) \
-    index >= 0 && index < Vec_len(self) ? Vec_as_ptr(self)[index] : (or)
+    (index >= 0 && index < Vec_len(self) ? Vec_as_ptr(self)[index] : (or))
 
 #define Vec_foreach(self, func)                 \
     do                                          \
@@ -109,7 +109,7 @@
     } while (0)
 
 #define Vec_first(self) \
-    &Vec_as_ptr(self)[0]
+    (&Vec_as_ptr(self)[0])
 
 #define Vec_last(self) \
-    &Vec_as_ptr(self)[Vec_len(self) - 1]
+    (&Vec_as_ptr(self)[Vec_len(self) - 1])

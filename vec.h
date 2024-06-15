@@ -24,7 +24,7 @@
     {NULL, 0, 0}
 
 #define Vec_with_capacity(num) \
-    {malloc(sizeof(*(Vec_as_ptr(self))) * num), num, 0}
+    {malloc(sizeof(*Vec_as_ptr(self)) * num), num, 0}
 
 #define Vec_is_empty(self) \
     (Vec_len(self) == 0)
@@ -84,7 +84,7 @@
 #define Vec_sort(self, comp)                                                       \
     do                                                                             \
     {                                                                              \
-        qsort(Vec_as_ptr(self), Vec_len(self), sizeof(*(Vec_as_ptr(self))), comp); \
+        qsort(Vec_as_ptr(self), Vec_len(self), sizeof(*Vec_as_ptr(self)), comp); \
     } while (0);
 
 #define Vec_get(self, index, or) \

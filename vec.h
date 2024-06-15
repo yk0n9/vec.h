@@ -81,11 +81,11 @@
         }                                                      \
     } while (0)
 
-#define Vec_sort(self, comp)                                                       \
-    do                                                                             \
-    {                                                                              \
+#define Vec_sort(self, comp)                                                     \
+    do                                                                           \
+    {                                                                            \
         qsort(Vec_as_ptr(self), Vec_len(self), sizeof(*Vec_as_ptr(self)), comp); \
-    } while (0);
+    } while (0)
 
 #define Vec_get(self, index, or) \
     (index >= 0 && index < Vec_len(self) ? Vec_as_ptr(self)[index] : (or))

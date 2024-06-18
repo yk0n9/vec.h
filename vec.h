@@ -23,8 +23,8 @@
 #define Vec_new() \
     {NULL, 0, 0}
 
-#define Vec_with_capacity(num) \
-    {malloc(sizeof(*Vec_as_ptr(self)) * num), num, 0}
+#define Vec_with_capacity(T, num) \
+    {malloc(sizeof(T) * num), num, 0}
 
 #define Vec_is_empty(self) \
     (Vec_len(self) == 0)

@@ -24,7 +24,7 @@
     {NULL, 0, 0}
 
 #define Vec_with_capacity(T, num) \
-    {malloc(sizeof(T) * num), num, 0}
+    {malloc(sizeof(T) * (num)), num, 0}
 
 #define Vec_is_empty(self) \
     (Vec_len(self) == 0)
@@ -59,7 +59,7 @@
             {                                                  \
                 __grow(self);                                  \
             }                                                  \
-            for (int i = Vec_len(self) - 1; i >= index; i--)   \
+            for (int i = Vec_len(self) - 1; i >= (index); i--) \
             {                                                  \
                 Vec_as_ptr(self)[i + 1] = Vec_as_ptr(self)[i]; \
             }                                                  \
@@ -71,9 +71,9 @@
 #define Vec_remove(self, index)                                \
     do                                                         \
     {                                                          \
-        if (index < Vec_len(self) || index >= 0)               \
+        if ((index) < Vec_len(self) || (index) >= 0)           \
         {                                                      \
-            for (int i = index; i < Vec_len(self) - 1; i++)    \
+            for (int i = (index); i < Vec_len(self) - 1; i++)  \
             {                                                  \
                 Vec_as_ptr(self)[i] = Vec_as_ptr(self)[i + 1]; \
             }                                                  \
@@ -88,7 +88,7 @@
     } while (0)
 
 #define Vec_get(self, index, or) \
-    (index >= 0 && index < Vec_len(self) ? Vec_as_ptr(self)[index] : (or))
+    ((index) >= 0 && (index) < Vec_len(self) ? Vec_as_ptr(self)[index] : (or))
 
 #define Vec_foreach(self, func)                 \
     do                                          \
@@ -114,10 +114,10 @@
 #define Vec_last(self) \
     (&Vec_as_ptr(self)[Vec_len(self) - 1])
 
-#define __swap(a, b)            \
-    do                          \
-    {                           \
-        a ^= b, b ^= a, a ^= b; \
+#define __swap(a, b)                        \
+    do                                      \
+    {                                       \
+        (a) ^= (b), (b) ^= (a), (a) ^= (b); \
     } while (0)
 
 #define Vec_reverse(self)                                                                     \

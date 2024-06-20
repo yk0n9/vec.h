@@ -120,14 +120,16 @@
         (a) ^= (b), (b) ^= (a), (a) ^= (b); \
     } while (0)
 
-#define Vec_reverse(self)                                                                     \
-    do                                                                                        \
-    {                                                                                         \
-        int half_len = Vec_len(self) / 2;                                                     \
-        int i = 0;                                                                            \
-        while (i < half_len)                                                                  \
-        {                                                                                     \
-            __swap(Vec_as_ptr(self)[i], (&Vec_as_ptr(self)[half_len + 1])[half_len - 1 - i]); \
-            i++;                                                                              \
-        }                                                                                     \
+#define Vec_reverse(self)                                                             \
+    do                                                                                \
+    {                                                                                 \
+        int half_len = Vec_len(self) / 2;                                             \
+        int i = 0;                                                                    \
+        int half = (Vec_len(self) & 1) != 0 ? half_len + 1 : half_len;                \
+        while (i < half_len)                                                          \
+        {                                                                             \
+            __swap(Vec_as_ptr(self)[i], (&Vec_as_ptr(self)[half])[half_len - 1 - i]); \
+            i++;                                                                      \
+        }                                                                             \
     } while (0)
+

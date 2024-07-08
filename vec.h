@@ -20,11 +20,15 @@
 #define __capacity(self) \
     ((self)->cap)
 
-#define Vec_new() \
-    {NULL, 0, 0}
+#define Vec_new()  \
+    {              \
+        NULL, 0, 0 \
+    }
 
-#define Vec_with_capacity(T, num) \
-    {malloc(sizeof(T) * (num)), num, 0}
+#define Vec_with_capacity(T, num)         \
+    {                                     \
+        malloc(sizeof(T) * (num)), num, 0 \
+    }
 
 #define Vec_is_empty(self) \
     (Vec_len(self) == 0)
@@ -132,4 +136,3 @@
             i++;                                                                      \
         }                                                                             \
     } while (0)
-

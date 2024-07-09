@@ -1,8 +1,6 @@
 #ifndef VEC_H
 #define VEC_H
 
-#endif // VEC_H
-
 #define Vec(T)            \
     struct                \
     {                     \
@@ -136,3 +134,5 @@
             i++;                                                                      \
         }                                                                             \
     } while (0)
+
+#endif // VEC_H

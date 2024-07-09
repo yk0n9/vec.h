@@ -1,3 +1,3 @@
 # vec.h
 
-C easy generics vector with macro
+C easy generics vector

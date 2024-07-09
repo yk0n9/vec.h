@@ -116,10 +116,10 @@
 #define Vec_last(self) \
     (&Vec_as_ptr(self)[Vec_len(self) - 1])
 
-#define __vec_swap(a, b, size)   \
+#define __vec_swap(a, b)         \
     do                           \
     {                            \
-        int count = size;        \
+        int count = sizeof(a);   \
         char *_a = (char *)&(a); \
         char *_b = (char *)&(b); \
         while (count--)          \
@@ -132,18 +132,17 @@
         }                        \
     } while (0)
 
-#define Vec_reverse(self)                                                                       \
-    do                                                                                          \
-    {                                                                                           \
-        int half_len = Vec_len(self) / 2;                                                       \
-        int i = 0;                                                                              \
-        int half = (Vec_len(self) & 1) != 0 ? half_len + 1 : half_len;                          \
-        int size = sizeof(Vec_as_ptr(self)[i]);                                                 \
-        while (i < half_len)                                                                    \
-        {                                                                                       \
-            __vec_swap(Vec_as_ptr(self)[i], (&Vec_as_ptr(self)[half])[half_len - 1 - i], size); \
-            i++;                                                                                \
-        }                                                                                       \
+#define Vec_reverse(self)                                                                 \
+    do                                                                                    \
+    {                                                                                     \
+        int half_len = Vec_len(self) / 2;                                                 \
+        int i = 0;                                                                        \
+        int half = (Vec_len(self) & 1) != 0 ? half_len + 1 : half_len;                    \
+        while (i < half_len)                                                              \
+        {                                                                                 \
+            __vec_swap(Vec_as_ptr(self)[i], (&Vec_as_ptr(self)[half])[half_len - 1 - i]); \
+            i++;                                                                          \
+        }                                                                                 \
     } while (0)
 
 #endif // VEC_H

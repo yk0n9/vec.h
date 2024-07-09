@@ -3,22 +3,42 @@
 
 #include "vec.h"
 
-void fun(int *i)
+typedef Vec(char) String;
+
+String String_from(char *str)
 {
-    printf("%d\n", *i);
+    String string = Vec_new();
+    while (str && *str != 0)
+    {
+        Vec_push(&string, *str);
+        str++;
+    }
+    Vec_push(&string, 0);
+    return string;
+}
+
+void fun(String *it)
+{
+    printf("%s\n", it->data);
+}
+
+void String_clean(String *it)
+{
+    Vec_clear(it);
 }
 
 int main()
 {
-    Vec(int) arr = Vec_new();
-    Vec_push(&arr, 1);
-    Vec_push(&arr, 2);
-    Vec_push(&arr, 3);
+    Vec(String) arr = Vec_new();
+
+    Vec_push(&arr, String_from("123"));
+    Vec_push(&arr, String_from("456"));
+    Vec_push(&arr, String_from("789"));
 
     Vec_foreach(&arr, fun);
-    // 1
-    // 2
-    // 3
+    // 123
+    // 456
+    // 789
 
     printf("cap = %d, len = %d\n", __capacity(&arr), Vec_len(&arr));
     // cap = 8, len = 3
@@ -26,13 +46,15 @@ int main()
     Vec_reverse(&arr);
 
     Vec_foreach(&arr, fun);
-    // 3
-    // 2
-    // 1
+    // 789
+    // 456
+    // 123
 
-    printf("%d\n", *Vec_last(&arr));
-    // 1
+    printf("\n");
+    printf("last: %s\n", (*Vec_last(&arr)).data);
+    // last: 123
 
-    Vec_clear(&arr);
     // free memory
+    Vec_foreach(&arr, String_clean);
+    Vec_clear(&arr);
 }

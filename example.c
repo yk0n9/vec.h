@@ -51,7 +51,7 @@ int main()
     // 123
 
     printf("\n");
-    printf("last: %s\n", (*Vec_last(&arr)).data);
+    printf("last: %s\n", Vec_last(&arr)->data);
     // last: 123
 
     // free memory

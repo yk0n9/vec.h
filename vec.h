@@ -1,11 +1,11 @@
 #ifndef VEC_H
 #define VEC_H
 
-#define Vec(T)            \
-    struct {              \
-        T *data;          \
-        unsigned int cap; \
-        unsigned int len; \
+#define Vec(T)      \
+    struct {        \
+        T *data;    \
+        size_t cap; \
+        size_t len; \
     }
 
 #define Vec_as_ptr(self) ((self)->data)

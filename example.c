@@ -5,11 +5,9 @@
 
 typedef Vec(char) String;
 
-String String_from(char *str)
-{
+String String_from(char *str) {
     String string = Vec_new();
-    while (str && *str != 0)
-    {
+    while (str && *str != 0) {
         Vec_push(&string, *str);
         str++;
     }
@@ -17,18 +15,11 @@ String String_from(char *str)
     return string;
 }
 
-void fun(String *it)
-{
-    printf("%s\n", it->data);
-}
+void fun(String *it) { printf("%s\n", it->data); }
 
-void String_clean(String *it)
-{
-    Vec_clear(it);
-}
+void String_clean(String *it) { Vec_clear(it); }
 
-int main()
-{
+int main() {
     Vec(String) arr = Vec_new();
 
     Vec_push(&arr, String_from("123"));
